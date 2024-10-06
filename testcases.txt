@@ -1,0 +1,9 @@
+1. for cif
+ - source dir does not exists
+ - source image file format not valid
+ - source and destination has same file format
+ - destination image format not valid
+ - destination dir does not exists
+ - destination does not contain filename
+
+ 2. 

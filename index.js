@@ -6,23 +6,30 @@ import convertImage from './services/convertImageFormat.js';
 
 const program = new Command();
 
-// Set the CLI version and description
+// Setting the CLI version and description
 program
   .version('1.0.0')
-  .description('A CLI tool for converting images from one format to another');
+  .description('A CLI tool for mutiple utility');
 
-// Add a command to convert images
+// command to convert images
 program
-  .command('cif <source> <type>')
+  .command('cif <source> <format>')
   .description('Convert image from source format to target format')
   .option('-o, --output <destination>', 'Specify the destination output file/directory')
-  .action((source, type, options) => {
-    const destination = options.output || process.cwd();  // If destination not provided, use current directory
-    const outputPath = path.resolve(destination);
+  .option('-v, --verbose', 'Enable verbose mode')
+  .action(async(source, format, options) => {
+    try {
+      const destination = options.output || source;
+      const resolvedPath = path.resolve(destination);
 
-    console.log(`Converting ${source} to ${type} format...`);
-    console.log(`Saving converted image to ${outputPath}`);
-    
+      const outputPath = destination.endsWith('/') ? (resolvedPath + '/') : resolvedPath
+      const verbose = options.verbose ? true : false;
+
+      await convertImage(source, format, outputPath, verbose)
+    } catch (err) {
+      console.error(`Error: ${err.message}`);
+      process.exit(1);
+    }
   });
 
 program.parse(process.argv);
