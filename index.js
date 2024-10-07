@@ -32,4 +32,26 @@ program
     }
   });
 
+// command to convert csv to json
+program
+  .command('ctj <source>')
+  .description('Convert CSV file to JSON format')
+  .option('-s, --save', 'Save the output to a JSON file instead of logging to console')
+  .option('-t, --transpose', 'Transpose the CSV before converting to JSON')
+  .option('-v, --verbose', 'Enable verbose logging')
+  .action(async (source, options) => {
+    try {
+      const verbose = options.verbose ? true : false;
+      const shouldSaveToFile = options.save ? true : false;
+      const shouldTranspose = options.transpose ? true : false;
+
+      console.log(source, verbose, shouldSaveToFile, shouldTranspose)
+    } catch (err) {
+      console.error(`Error: ${err.message}`);
+      process.exit(1);
+    }
+  });
+
 program.parse(process.argv);
+
+/////////////------------------- to do -> check for permission denied files ------------------------------//////////////////////

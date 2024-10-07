@@ -6,4 +6,9 @@
  - destination dir does not exists
  - destination does not contain filename
 
- 2. 
+ 2. for ctj
+    - source dir does not exists
+    - source csv file format not valid
+    - Source CSV Contains Invalid Data
+    - Handling CSV Files with Complex Data (for example - `{} , "`)
+    - Handling for large CSV Files
