@@ -11,4 +11,3 @@
     - source csv file format not valid
     - Source CSV Contains Invalid Data
     - Handling CSV Files with Complex Data (for example - `{} , "`)
-    - Handling for large CSV Files

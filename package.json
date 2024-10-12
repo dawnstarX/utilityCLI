@@ -11,6 +11,7 @@
   "description": "",
   "dependencies": {
     "commander": "^12.1.0",
+    "csvtojson": "^2.0.10",
     "sharp": "^0.33.5"
   }
 }

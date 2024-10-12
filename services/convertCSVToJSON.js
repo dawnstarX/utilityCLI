@@ -1,9 +1,7 @@
 import checkSourceAndTarget from './util/checkSource.js'
-
-const fs = require('fs');
-const path = require('path');
-const csv = require('csvtojson'); // Use csvtojson npm package for conversion
-const checkSourceAndTarget  = require('./util/checkSource.js'); // Assuming this utility function exists
+import path from 'path';
+import fs from 'fs';
+import csv from 'csvtojson';
 
 /**
  * Converts a CSV file to JSON format with optional file saving and transposition.
@@ -26,30 +24,31 @@ const convertCSV = async (source, shouldSaveToFile, shouldTranspose, verbose) =>
         // Check if source file and formats are valid
         checkSourceAndTarget(source, validFormats, targetFormat, [targetFormat]);
 
-        // Read CSV data
-        let csvData = await csv().fromFile(source);
+        // Reading CSV data as 2D array
+        let csvData = await csv({
+            noheader: true,
+            output: 'csv'
+        }).fromFile(source);
 
         if (verbose) console.log('CSV data successfully read.');
 
-        // Transpose the CSV if the flag is set
+        // Transposing the CSV
         if (shouldTranspose) {
             if (verbose) console.log('Transposing CSV data...');
             csvData = transposeCSV(csvData);
         }
 
-        // Convert to JSON
-        const jsonData = JSON.stringify(csvData, null, 2);
+        // converting CSV to JSON
+        const jsonCSVData = csvArrayToJson(csvData);
+        const jsonData = JSON.stringify(jsonCSVData, null, 2);
 
         if (shouldSaveToFile) {
-            // Determine the output path (same as CSV but with .json extension)
             const destination = source.replace('.csv', '.json');
             const outputPath = path.resolve(destination);
 
-            // Save the JSON to a file
             fs.writeFileSync(outputPath, jsonData, 'utf8');
             if (verbose) console.log(`JSON successfully saved to ${outputPath}`);
         } else {
-            // Log the JSON to the console for quick use
             console.log(jsonData);
         }
     } catch (err) {
@@ -59,14 +58,34 @@ const convertCSV = async (source, shouldSaveToFile, shouldTranspose, verbose) =>
 };
 
 /**
- * Transposes a 2D array (list of rows from CSV).
+ * converts a 2D array into JSON.
  * 
- * @param {Array} data - The CSV data array.
- * @returns {Array} - The transposed array.
+ * @param {Array} csvArray - The CSV data array.
+ * @returns {Array} - Array of JS obj.
  */
-const transposeCSV = (data) => {
-    return data[0].map((_, colIndex) => data.map(row => row[colIndex]));
+const csvArrayToJson = (csvArray) => {
+    const headers = csvArray[0];
+    const rows = csvArray.slice(1);
+
+    const jsonArray = rows.map(row => {
+        let obj = {};
+        headers.forEach((header, index) => {
+            obj[header] = row[index];
+        });
+        return obj;
+    });
+
+    return jsonArray;
 };
 
+/**
+ * Transponse a 2D array.
+ * 
+ * @param {Array} csvArray - 2D csv data array.
+ * @returns {Array} - Transposed 2D array.s
+ */
+const transposeCSV = (csvArray) => {
+    return csvArray[0].map((_, colIndex) => csvArray.map(row => row[colIndex]));
+};
 
 export default convertCSV;

@@ -18,7 +18,7 @@ const convertImage = async (source, format, destination, verbose = false) => {
         // valid image formats 
         const validFormats = ['jpeg', 'jpg', 'png', 'webp', 'tiff', 'gif'];
 
-        // checks for source file and format
+        // checks for source file, format and target format
         checkSourceAndTarget(source, validFormats, format, validFormats);
 
         // extracting directory and filename

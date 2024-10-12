@@ -3,6 +3,7 @@
 import { Command } from 'commander';
 import path from 'path';
 import convertImage from './services/convertImageFormat.js';
+import convertCSV from './services/convertCSVToJSON.js';
 
 const program = new Command();
 
@@ -45,7 +46,7 @@ program
       const shouldSaveToFile = options.save ? true : false;
       const shouldTranspose = options.transpose ? true : false;
 
-      console.log(source, verbose, shouldSaveToFile, shouldTranspose)
+      await convertCSV(source, shouldSaveToFile, shouldTranspose, verbose);
     } catch (err) {
       console.error(`Error: ${err.message}`);
       process.exit(1);
@@ -53,5 +54,3 @@ program
   });
 
 program.parse(process.argv);
-
-/////////////------------------- to do -> check for permission denied files ------------------------------//////////////////////
