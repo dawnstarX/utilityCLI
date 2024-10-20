@@ -4,6 +4,7 @@ import { Command } from 'commander';
 import path from 'path';
 import convertImage from './services/convertImageFormat.js';
 import convertCSV from './services/convertCSVToJSON.js';
+import convertVideo from './services/convertVedioFile.js';
 
 const program = new Command();
 
@@ -47,6 +48,24 @@ program
       const shouldTranspose = options.transpose ? true : false;
 
       await convertCSV(source, shouldSaveToFile, shouldTranspose, verbose);
+    } catch (err) {
+      console.error(`Error: ${err.message}`);
+      process.exit(1);
+    }
+  });
+
+// command to convert vedio file
+program
+  .command('cvf <source>')
+  .description('Convert video file to any specified format (audio or video)')
+  .option('-f, --format <format>', 'Specify output format (e.g., mp4, mp3, avi)', 'mp4')
+  .option('-v, --verbose', 'Enable verbose logging')
+  .action(async (source, options) => {
+    try {
+      const verbose = options.verbose ? true : false;
+      const outputFormat = options.format; // Use the specified format
+
+      await convertVideo(source, outputFormat, verbose);
     } catch (err) {
       console.error(`Error: ${err.message}`);
       process.exit(1);

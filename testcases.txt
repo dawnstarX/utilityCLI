@@ -11,3 +11,10 @@
     - source csv file format not valid
     - Source CSV Contains Invalid Data
     - Handling CSV Files with Complex Data (for example - `{} , "`)
+
+3. for cvf
+   - source dir does not exists
+   - source vedio file does not exists
+   - source file is Corrupted
+   - source format is not valid
+   - target format is not valid
